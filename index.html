@@ -1,0 +1,1512 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>SPS — Local School Management</title>
+    <style>
+         :root {
+            --bg: #eef3f6;
+            --card: #fff;
+            --accent: #0a6fff;
+            --muted: #6b7280;
+            --success: #16a34a;
+            --danger: #ef4444;
+        }
+        
+        * {
+            box-sizing: border-box;
+            font-family: Inter, Segoe UI, Roboto, Arial, sans-serif
+        }
+        
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: #0b1320
+        }
+        
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 28px;
+            background: #fff;
+            border-bottom: 1px solid #e6edf3
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px
+        }
+        
+        .logo {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--accent), #4aa3ff);
+            border-radius: 12px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700
+        }
+        
+        .title {
+            font-weight: 700
+        }
+        
+        .subtitle {
+            color: var(--muted);
+            font-size: 13px
+        }
+        
+        .school-info {
+            font-size: 13px;
+            color: var(--muted);
+            margin-left: 12px
+        }
+        
+        .top-right {
+            display: flex;
+            gap: 12px;
+            align-items: center
+        }
+        
+        .btn {
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            background: #fff;
+            cursor: pointer
+        }
+        
+        .btn.primary {
+            background: var(--accent);
+            color: #fff;
+            border: none
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 28px auto;
+            padding: 18px
+        }
+        
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 6px 18px rgba(10, 15, 30, 0.04)
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-top: 18px
+        }
+        
+        .stat {
+            padding: 26px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(10, 15, 30, 0.04)
+        }
+        
+        .stat h3 {
+            margin: 6px 0;
+            color: var(--muted);
+            font-weight: 600
+        }
+        
+        .stat .n {
+            font-size: 28px;
+            font-weight: 700;
+            margin-top: 6px
+        }
+        
+        .navgrid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 18px
+        }
+        
+        .navbtn {
+            padding: 14px;
+            border-radius: 8px;
+            background: linear-gradient(180deg, var(--accent), #147bff);
+            color: #fff;
+            text-align: center;
+            cursor: pointer
+        }
+        
+        .hidden {
+            display: none
+        }
+        
+        .panel {
+            display: none
+        }
+        
+        .panel.active {
+            display: block
+        }
+        
+        .panel .panel-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px
+        }
+        
+        input,
+        select,
+        textarea {
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse
+        }
+        
+        th,
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #eef2f7;
+            text-align: left
+        }
+        
+        .small {
+            font-size: 13px;
+            color: var(--muted)
+        }
+        
+        .search-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 12px
+        }
+        
+        .right {
+            margin-left: auto
+        }
+        
+        .modal-back {
+            position: fixed;
+            inset: 0;
+            background: rgba(6, 11, 18, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999
+        }
+        
+        .modal {
+            width: 760px;
+            max-width: 95%;
+            background: #fff;
+            border-radius: 10px;
+            padding: 18px;
+            box-shadow: 0 12px 36px rgba(10, 15, 30, 0.25)
+        }
+        
+        .row {
+            display: flex;
+            gap: 8px
+        }
+        
+        .muted {
+            color: var(--muted)
+        }
+        
+        .danger {
+            background: var(--danger);
+            color: #fff
+        }
+        
+        .success {
+            background: var(--success);
+            color: #fff
+        }
+        
+        .info {
+            background: #0ea5ff;
+            color: #fff
+        }
+        
+        .pill {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #f1f5f9
+        }
+        
+        .receipt {
+            font-family: monospace;
+            font-size: 14px;
+            background: #fff;
+            padding: 14px;
+            border-radius: 8px
+        }
+        
+        footer {
+            padding: 12px;
+            color: var(--muted);
+            text-align: center
+        }
+        
+        @media (max-width:900px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+            .navgrid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div style="display:flex;align-items:center">
+            <div class="brand">
+                <div class="logo">SPS</div>
+                <div>
+                    <div class="title" id="schoolTitle">Springdale Public School</div>
+                    <div class="subtitle" id="schoolTag">Single-file local school management (localStorage)</div>
+                </div>
+            </div>
+            <div class="school-info" id="schoolInfoShort"></div>
+        </div>
+
+        <div class="top-right">
+            <div class="top-actions">
+                <button id="exportBtn" class="btn">Export JSON</button>
+                <button id="importBtn" class="btn">Import JSON</button>
+                <button id="resetBtn" class="btn" style="border-color:var(--danger);color:var(--danger)">Reset Demo</button>
+            </div>
+            <div style="margin-left:14px" id="userArea">Logged in as <strong id="who">Administrator</strong> <button id="logoutBtn" class="btn">Logout</button></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="loginPanel" class="card" style="max-width:520px;margin:40px auto;">
+            <h2>Admin Login</h2>
+            <div class="small">Enter admin credentials to manage the school system</div>
+            <div style="margin-top:12px">
+                <input id="loginUser" placeholder="Username" style="width:100%;padding:10px;border-radius:8px;border:1px solid #e2e8f0;margin-bottom:8px" />
+                <input id="loginPass" placeholder="Password" type="password" style="width:100%;padding:10px;border-radius:8px;border:1px solid #e2e8f0;margin-bottom:8px" />
+                <div style="display:flex;gap:8px">
+                    <button id="loginBtn" class="btn primary">Login</button>
+                    <button id="demoBtn" class="btn">Use Demo Data</button>
+                </div>
+                <div class="small muted" style="margin-top:8px">Default: <span class="pill">admin / admin</span></div>
+            </div>
+        </div>
+
+        <div id="mainApp" class="hidden">
+            <div class="card">
+                <div style="display:flex;align-items:center;justify-content:space-between">
+                    <div>
+                        <h1 style="margin:0" id="dashTitle">Dashboard</h1>
+                        <div class="small muted">Overview & quick actions</div>
+                    </div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap">
+                        <button class="btn" id="goStudents">Students</button>
+                        <button class="btn" id="goStaff">Staff</button>
+                        <button class="btn" id="goMarks">Marks</button>
+                        <button class="btn" id="goAttendance">Attendance</button>
+                        <button class="btn" id="goFees">Fees</button>
+                        <button class="btn" id="goSalary">Salary</button>
+                        <button class="btn" id="goDocuments">Documents</button>
+                        <button class="btn" id="goLeaves">Leaves</button>
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div class="stat">
+                        <h3>Students</h3>
+                        <div class="n" id="statStudents">0</div>
+                    </div>
+                    <div class="stat">
+                        <h3>Staff</h3>
+                        <div class="n" id="statStaff">0</div>
+                    </div>
+                    <div class="stat">
+                        <h3>Marks</h3>
+                        <div class="n" id="statMarks">0</div>
+                    </div>
+                    <div class="stat">
+                        <h3>Attendance Records</h3>
+                        <div class="n" id="statAttendance">0</div>
+                    </div>
+                    <div class="stat">
+                        <h3>Fees Payments</h3>
+                        <div class="n" id="statFees">0</div>
+                    </div>
+                    <div class="stat">
+                        <h3>Salary Paid</h3>
+                        <div class="n" id="statSalary">0</div>
+                    </div>
+                    <div class="stat">
+                        <h3>Documents</h3>
+                        <div class="n" id="statDocs">0</div>
+                    </div>
+                    <div class="stat">
+                        <h3>Leaves</h3>
+                        <div class="n" id="statLeaves">0</div>
+                    </div>
+                </div>
+
+                <div class="navgrid">
+                    <div class="navbtn" id="navStudents">Students</div>
+                    <div class="navbtn" id="navStaff">Staff</div>
+                    <div class="navbtn" id="navMarks">Marks</div>
+                    <div class="navbtn" id="navAttendance">Attendance</div>
+                    <div class="navbtn" id="navFees">Fees</div>
+                    <div class="navbtn" id="navSalary">Salary</div>
+                    <div class="navbtn" id="navDocuments">Documents</div>
+                    <div class="navbtn" id="navLeaves">Leaves</div>
+                </div>
+            </div>
+
+            <div id="appview">
+                <!-- Students Panel -->
+                <div id="studentsPanel" class="panel card">
+                    <div style="display:flex;align-items:center;justify-content:space-between">
+                        <div>
+                            <div class="panel-title">Students</div>
+                            <div class="small muted">Add, edit or delete students. Click student to manage documents.</div>
+                        </div>
+                        <div>
+                            <button class="btn" id="studentsBack">Back to Dashboard</button>
+                            <button class="btn primary" id="addStudentBtn">Add Student</button>
+                        </div>
+                    </div>
+
+                    <div class="search-row" style="margin-top:12px">
+                        <input id="stuSearchName" placeholder="Search by name" />
+                        <select id="stuSearchClass"><option value="">All classes</option></select>
+                        <button id="stuSearchBtn" class="btn">Search</button>
+                        <button id="stuClearBtn" class="btn">Clear</button>
+                    </div>
+
+                    <div style="margin-top:12px;overflow:auto">
+                        <table id="studentsTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Class</th>
+                                    <th>Roll</th>
+                                    <th>Total Fees</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Staff Panel -->
+                <div id="staffPanel" class="panel card">
+                    <div style="display:flex;align-items:center;justify-content:space-between">
+                        <div>
+                            <div class="panel-title">Staff</div>
+                            <div class="small muted">Add / edit employees</div>
+                        </div>
+                        <div>
+                            <button class="btn" id="staffBack">Back to Dashboard</button>
+                            <button class="btn primary" id="addStaffBtn">Add Staff</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:12px" class="search-row">
+                        <input id="staffSearchName" placeholder="Search staff name" />
+                        <button id="staffSearchBtn" class="btn">Search</button>
+                        <button id="staffClearBtn" class="btn">Clear</button>
+                    </div>
+
+                    <table id="staffTable" style="margin-top:12px">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Designation</th>
+                                <th>Salary</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <!-- Marks Panel -->
+                <div id="marksPanel" class="panel card">
+                    <div style="display:flex;align-items:center;justify-content:space-between">
+                        <div>
+                            <div class="panel-title">Marks</div>
+                            <div class="small muted">Create exam, choose class, then enter marks for each student</div>
+                        </div>
+                        <div>
+                            <button class="btn" id="marksBack">Back to Dashboard</button>
+                            <button class="btn primary" id="addExamBtn">Create Exam</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:12px" class="search-row">
+                        <select id="marksExamSelect"></select>
+                        <select id="marksClassSelect"></select>
+                        <button id="marksLoad" class="btn">Load Students</button>
+                        <button id="marksClear" class="btn">Clear</button>
+                    </div>
+
+                    <div id="marksFormArea" style="margin-top:12px"></div>
+
+                </div>
+
+                <!-- Attendance Panel -->
+                <div id="attendancePanel" class="panel card">
+                    <div style="display:flex;align-items:center;justify-content:space-between">
+                        <div>
+                            <div class="panel-title">Attendance</div>
+                            <div class="small muted">Search by class, load students and mark present</div>
+                        </div>
+                        <div>
+                            <button class="btn" id="attendanceBack">Back to Dashboard</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:12px" class="search-row">
+                        <select id="attClassSelect"></select>
+                        <input id="attDate" type="date" />
+                        <button id="attLoadBtn" class="btn">Load Students</button>
+                        <button id="attSearchStudentBtn" class="btn">Search by student</button>
+                    </div>
+
+                    <div id="attStudentsArea" style="margin-top:12px"></div>
+                </div>
+
+                <!-- Fees Panel -->
+                <div id="feesPanel" class="panel card">
+                    <div style="display:flex;align-items:center;justify-content:space-between">
+                        <div>
+                            <div class="panel-title">Fees</div>
+                            <div class="small muted">Search student by class & name. Pay fees and view history/receipt.</div>
+                        </div>
+                        <div>
+                            <button class="btn" id="feesBack">Back to Dashboard</button>
+                            <button class="btn primary" id="payFeeBtn" disabled>Pay Fee</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:12px" class="search-row">
+                        <select id="feesClassSelect"></select>
+                        <input id="feesSearchName" placeholder="Student name" />
+                        <button id="feesSearchBtn" class="btn">Search</button>
+                    </div>
+
+                    <div id="feesStudentArea" style="margin-top:12px"></div>
+                    <div id="feesHistoryArea" style="margin-top:12px"></div>
+                </div>
+
+                <!-- Salary Panel -->
+                <div id="salaryPanel" class="panel card">
+                    <div style="display:flex;align-items:center;justify-content:space-between">
+                        <div>
+                            <div class="panel-title">Salary</div>
+                            <div class="small muted">Search employee, add salary record for month and mark Disbursed</div>
+                        </div>
+                        <div>
+                            <button class="btn" id="salaryBack">Back to Dashboard</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:12px" class="search-row">
+                        <input id="salarySearchName" placeholder="Search employee name" />
+                        <button id="salarySearchBtn" class="btn">Search</button>
+                    </div>
+
+                    <div id="salaryArea" style="margin-top:12px"></div>
+                </div>
+
+                <!-- Documents Panel -->
+                <div id="documentsPanel" class="panel card">
+                    <div style="display:flex;align-items:center;justify-content:space-between">
+                        <div>
+                            <div class="panel-title">Documents</div>
+                            <div class="small muted">Search student and add document details (marksheet, TC, etc.) and Handover</div>
+                        </div>
+                        <div>
+                            <button class="btn" id="documentsBack">Back to Dashboard</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:12px" class="search-row">
+                        <select id="docClassSelect"></select>
+                        <input id="docStudentName" placeholder="Student name" />
+                        <button id="docSearchBtn" class="btn">Search</button>
+                    </div>
+
+                    <div id="docArea" style="margin-top:12px"></div>
+                </div>
+
+                <!-- Leaves Panel -->
+                <div id="leavesPanel" class="panel card">
+                    <div style="display:flex;align-items:center;justify-content:space-between">
+                        <div>
+                            <div class="panel-title">Leaves</div>
+                            <div class="small muted">Add leave requests and view list</div>
+                        </div>
+                        <div>
+                            <button class="btn" id="leavesBack">Back to Dashboard</button>
+                            <button class="btn primary" id="addLeaveBtn">Add Leave</button>
+                        </div>
+                    </div>
+
+                    <div id="leavesArea" style="margin-top:12px"></div>
+                </div>
+            </div>
+
+            <footer class="small muted">Data stored locally in your browser (localStorage). Export to move to another device.</footer>
+
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="modalRoot" class="hidden"></div>
+
+    <script>
+        /* Single-file local school management v2
+           Fixes:
+           - Startup school info form
+           - Staff salary button fixed
+           - Document handover fixed
+           - All data stored in localStorage
+        */
+
+        const dbKey = 'sps_db_v2';
+
+        // Utilities
+        function uid(prefix = 'id') {
+            return prefix + '_' + Math.random().toString(36).slice(2, 9)
+        }
+
+        function nowIso() {
+            return new Date().toISOString()
+        }
+
+        function toast(msg) {
+            alert(msg)
+        }
+
+        // Demo seed
+        const demoData = {
+            meta: {
+                created: nowIso(),
+                school: null
+            },
+            students: [{
+                id: uid('stu'),
+                name: 'Aman Singh',
+                class: '10A',
+                roll: '1',
+                totalFees: 50000
+            }, {
+                id: uid('stu'),
+                name: 'Riya Sharma',
+                class: '10A',
+                roll: '2',
+                totalFees: 50000
+            }, {
+                id: uid('stu'),
+                name: 'Vikram Kumar',
+                class: '9B',
+                roll: '5',
+                totalFees: 45000
+            }, ],
+            staff: [{
+                id: uid('stf'),
+                name: 'Sunita Verma',
+                designation: 'Math Teacher',
+                salary: 35000
+            }, {
+                id: uid('stf'),
+                name: 'Rajesh Patel',
+                designation: 'Clerk',
+                salary: 18000
+            }],
+            exams: [],
+            marks: [], // {id, examId, studentId, class, subjects}
+            attendance: [],
+            feesPayments: [],
+            salaryPayments: [],
+            documents: [],
+            leaves: []
+        };
+
+        // DB helpers
+        function loadDB() {
+            const raw = localStorage.getItem(dbKey);
+            if (!raw) {
+                localStorage.setItem(dbKey, JSON.stringify(demoData));
+                return JSON.parse(JSON.stringify(demoData));
+            }
+            try {
+                return JSON.parse(raw);
+            } catch (e) {
+                return JSON.parse(JSON.stringify(demoData));
+            }
+        }
+
+        function saveDB(db) {
+            localStorage.setItem(dbKey, JSON.stringify(db));
+        }
+
+        // App state
+        let db = loadDB();
+        let currentUser = null;
+
+        // Elements
+        const loginPanel = document.getElementById('loginPanel');
+        const mainApp = document.getElementById('mainApp');
+        const modalRoot = document.getElementById('modalRoot');
+        const who = document.getElementById('who');
+        const schoolInfoShort = document.getElementById('schoolInfoShort');
+        const schoolTitleEl = document.getElementById('schoolTitle');
+
+        // Initialize school info if missing
+        function ensureSchoolInfo() {
+            db = loadDB();
+            if (!db.meta) db.meta = {
+                created: nowIso(),
+                school: null
+            };
+            if (!db.meta.school) {
+                // ask for school details in a modal
+                openModal(`<h3>Setup School Information</h3>
+      <div style="margin-top:8px"><input id="s_name" placeholder="School Name" style="width:100%;padding:8px;border-radius:6px;border:1px solid #d1d5db"/></div>
+      <div style="margin-top:8px"><input id="s_address" placeholder="Address" style="width:100%;padding:8px;border-radius:6px;border:1px solid #d1d5db"/></div>
+      <div style="margin-top:8px"><input id="s_contact" placeholder="Contact Number" style="width:100%;padding:8px;border-radius:6px;border:1px solid #d1d5db"/></div>
+      <div style="margin-top:12px;display:flex;justify-content:flex-end;gap:8px;"><button class="btn" id="s_cancel">Cancel</button><button class="btn primary" id="s_save">Save</button></div>`, false);
+                document.getElementById('s_save').addEventListener('click', () => {
+                    const name = document.getElementById('s_name').value.trim();
+                    const address = document.getElementById('s_address').value.trim();
+                    const contact = document.getElementById('s_contact').value.trim();
+                    if (!name) {
+                        alert('School name required');
+                        return;
+                    }
+                    db.meta.school = {
+                        name,
+                        address,
+                        contact
+                    };
+                    saveDB(db);
+                    closeModal();
+                    refreshSchoolInfoDisplay();
+                });
+                document.getElementById('s_cancel').addEventListener('click', () => {
+                    closeModal();
+                });
+            } else {
+                refreshSchoolInfoDisplay();
+            }
+        }
+
+        function refreshSchoolInfoDisplay() {
+            db = loadDB();
+            const s = db.meta && db.meta.school;
+            if (s) {
+                schoolInfoShort.innerHTML = `${s.address ? s.address + ' • ' : ''}${s.contact ? '☎ ' + s.contact : ''}`;
+                schoolTitleEl.textContent = s.name || 'Springdale Public School';
+            } else {
+                schoolInfoShort.innerHTML = '';
+            }
+        }
+
+        // Login flow
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            const u = document.getElementById('loginUser').value.trim();
+            const p = document.getElementById('loginPass').value.trim();
+            if (u === 'admin' && p === 'admin') {
+                currentUser = {
+                    name: 'Administrator'
+                };
+                who.textContent = currentUser.name;
+                showApp();
+            } else alert('Invalid. Default admin/admin');
+        });
+        document.getElementById('demoBtn').addEventListener('click', () => {
+            db = JSON.parse(JSON.stringify(demoData));
+            db.meta.school = {
+                name: 'Springdale Public School',
+                address: 'Springdale',
+                contact: '0000000000'
+            };
+            saveDB(db);
+            currentUser = {
+                name: 'Administrator'
+            };
+            who.textContent = currentUser.name;
+            showApp();
+        });
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            currentUser = null;
+            showLogin();
+        });
+
+        // Export / Import / Reset
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            const data = localStorage.getItem(dbKey);
+            const blob = new Blob([data], {
+                type: 'application/json'
+            });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'sps_export.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+        document.getElementById('importBtn').addEventListener('click', () => {
+            const inp = document.createElement('input');
+            inp.type = 'file';
+            inp.accept = 'application/json';
+            inp.onchange = (e) => {
+                const f = e.target.files[0];
+                const r = new FileReader();
+                r.onload = ev => {
+                    try {
+                        const parsed = JSON.parse(ev.target.result);
+                        localStorage.setItem(dbKey, JSON.stringify(parsed));
+                        db = loadDB();
+                        toast('Imported successfully');
+                        renderAllTables();
+                        refreshStats();
+                        refreshSchoolInfoDisplay();
+                    } catch (err) {
+                        alert('Invalid file')
+                    }
+                };
+                r.readAsText(f);
+            };
+            inp.click();
+        });
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            if (confirm('Reset demo data? This will overwrite current local data.')) {
+                db = JSON.parse(JSON.stringify(demoData));
+                db.meta.school = {
+                    name: 'Springdale Public School',
+                    address: 'Demo address',
+                    contact: '0000000000'
+                };
+                saveDB(db);
+                renderAllTables();
+                refreshStats();
+                refreshSchoolInfoDisplay();
+                toast('Reset completed')
+            }
+        });
+
+        // Navigation wiring
+        const panelMap = {
+            students: 'studentsPanel',
+            staff: 'staffPanel',
+            marks: 'marksPanel',
+            attendance: 'attendancePanel',
+            fees: 'feesPanel',
+            salary: 'salaryPanel',
+            documents: 'documentsPanel',
+            leaves: 'leavesPanel'
+        };
+
+        function openPanel(name) {
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            if (!name || name === 'dashboard') return;
+            const id = panelMap[name];
+            if (id) document.getElementById(id).classList.add('active');
+            // special
+            if (name === 'marks') populateExamSelect();
+            if (name === 'attendance') populateAttClasses();
+            if (name === 'fees') populateFeesClasses();
+            if (name === 'documents') populateDocClasses();
+            if (name === 'students') renderStudents();
+            if (name === 'staff') renderStaff();
+            if (name === 'leaves') renderLeaves();
+        }
+
+        // header buttons & navs
+        ['Students', 'Staff', 'Marks', 'Attendance', 'Fees', 'Salary', 'Documents', 'Leaves'].forEach(name => {
+            const nav = document.getElementById('nav' + name);
+            if (nav) nav.addEventListener('click', () => openPanel(name.toLowerCase()));
+        });
+        document.getElementById('goStudents').addEventListener('click', () => openPanel('students'));
+        document.getElementById('goStaff').addEventListener('click', () => openPanel('staff'));
+        document.getElementById('goMarks').addEventListener('click', () => openPanel('marks'));
+        document.getElementById('goAttendance').addEventListener('click', () => openPanel('attendance'));
+        document.getElementById('goFees').addEventListener('click', () => openPanel('fees'));
+        document.getElementById('goSalary').addEventListener('click', () => openPanel('salary'));
+        document.getElementById('goDocuments').addEventListener('click', () => openPanel('documents'));
+        document.getElementById('goLeaves').addEventListener('click', () => openPanel('leaves'));
+
+        // Back buttons (return to dashboard)
+        ['studentsBack', 'staffBack', 'marksBack', 'attendanceBack', 'feesBack', 'salaryBack', 'documentsBack', 'leavesBack'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('click', () => openPanel('dashboard'));
+        });
+
+        // Dashboard stats
+        function refreshStats() {
+            db = loadDB();
+            document.getElementById('statStudents').textContent = db.students.length;
+            document.getElementById('statStaff').textContent = db.staff.length;
+            document.getElementById('statMarks').textContent = db.marks.length;
+            document.getElementById('statAttendance').textContent = db.attendance.length;
+            document.getElementById('statFees').textContent = db.feesPayments.length;
+            document.getElementById('statSalary').textContent = db.salaryPayments.filter(s => s.disbursed).length;
+            document.getElementById('statDocs').textContent = db.documents.length;
+            document.getElementById('statLeaves').textContent = db.leaves.length;
+        }
+
+        // Students CRUD
+        const studentsTableBody = document.querySelector('#studentsTable tbody');
+        const stuClassFilter = document.getElementById('stuSearchClass');
+
+        function populateClassFilters() {
+            db = loadDB();
+            const classes = Array.from(new Set(db.students.map(s => s.class))).sort();
+            const selects = [stuClassFilter, document.getElementById('marksClassSelect'),
+                document.getElementById('attClassSelect'), document.getElementById('feesClassSelect'),
+                document.getElementById('docClassSelect')
+            ];
+            selects.forEach(sel => {
+                if (!sel) return;
+                const old = sel.value || '';
+                sel.innerHTML = '<option value="">All classes</option>';
+                classes.forEach(c => {
+                    const o = document.createElement('option');
+                    o.value = c;
+                    o.textContent = c;
+                    sel.appendChild(o)
+                });
+                sel.value = old;
+            });
+        }
+
+        function renderStudents(filterName = '', filterClass = '') {
+            db = loadDB();
+            populateClassFilters();
+            const tbody = studentsTableBody;
+            tbody.innerHTML = '';
+            const list = db.students.filter(s => {
+                return (!filterName || s.name.toLowerCase().includes(filterName.toLowerCase())) &&
+                    (!filterClass || s.class === filterClass)
+            }).sort((a, b) => (a.class || '').localeCompare(b.class || '') || parseInt(a.roll || 0) - parseInt(b.roll || 0));
+            list.forEach((s, i) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${i+1}</td><td>${s.name}</td><td>${s.class || ''}</td><td>${s.roll||''}</td><td>${s.totalFees||0}</td>
+      <td>
+        <button class="btn" data-id="${s.id}" data-action="edit">Edit</button>
+        <button class="btn" data-id="${s.id}" data-action="docs">Docs</button>
+        <button class="btn danger" data-id="${s.id}" data-action="delete">Delete</button>
+      </td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        document.getElementById('stuSearchBtn').addEventListener('click', () => renderStudents(document.getElementById('stuSearchName').value, document.getElementById('stuSearchClass').value));
+        document.getElementById('stuClearBtn').addEventListener('click', () => {
+            document.getElementById('stuSearchName').value = '';
+            document.getElementById('stuSearchClass').value = '';
+            renderStudents();
+        });
+
+        studentsTableBody.addEventListener('click', (e) => {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            const id = btn.dataset.id;
+            const action = btn.dataset.action;
+            db = loadDB();
+            if (action === 'edit') openStudentModal(db.students.find(s => s.id === id));
+            if (action === 'delete') {
+                if (confirm('Delete this student?')) {
+                    db.students = db.students.filter(s => s.id !== id);
+                    saveDB(db);
+                    renderStudents();
+                    refreshStats();
+                }
+            }
+            if (action === 'docs') {
+                openDocumentsModalForStudent(db.students.find(s => s.id === id))
+            }
+        });
+
+        document.getElementById('addStudentBtn').addEventListener('click', () => openStudentModal());
+
+        function openStudentModal(student = null) {
+            modalRoot.innerHTML = '';
+            const m = document.createElement('div');
+            m.className = 'modal-back';
+            m.innerHTML = `<div class="modal">
+    <h3>${student ? 'Edit Student' : 'Add Student'}</h3>
+    <div class="row" style="margin-top:8px">
+      <input id="ms_name" placeholder="Name" />
+      <input id="ms_class" placeholder="Class (e.g. 10A)" />
+      <input id="ms_roll" placeholder="Roll" />
+    </div>
+    <div class="row" style="margin-top:8px">
+      <input id="ms_totalFees" placeholder="Total Fees (e.g. 50000)" />
+      <input id="ms_notes" placeholder="Notes (optional)" />
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn" id="ms_cancel">Close</button>
+      <button class="btn primary" id="ms_save">Save</button>
+    </div>
+  </div>`;
+            modalRoot.appendChild(m);
+            modalRoot.classList.remove('hidden');
+
+            if (student) {
+                document.getElementById('ms_name').value = student.name;
+                document.getElementById('ms_class').value = student.class;
+                document.getElementById('ms_roll').value = student.roll || '';
+                document.getElementById('ms_totalFees').value = student.totalFees || '';
+                document.getElementById('ms_notes').value = student.notes || '';
+            }
+            m.addEventListener('click', (ev) => {
+                if (ev.target === m || ev.target.id === 'ms_cancel') {
+                    modalRoot.innerHTML = '';
+                    modalRoot.classList.add('hidden')
+                }
+            });
+            document.getElementById('ms_save').addEventListener('click', () => {
+                const name = document.getElementById('ms_name').value.trim();
+                if (!name) {
+                    alert('Name required');
+                    return;
+                }
+                const stClass = document.getElementById('ms_class').value.trim();
+                const roll = document.getElementById('ms_roll').value.trim();
+                const total = parseFloat(document.getElementById('ms_totalFees').value) || 0;
+                db = loadDB();
+                if (student) {
+                    student.name = name;
+                    student.class = stClass;
+                    student.roll = roll;
+                    student.totalFees = total;
+                    db.students = db.students.map(s => s.id === student.id ? student : s);
+                } else {
+                    db.students.push({
+                        id: uid('stu'),
+                        name,
+                        class: stClass,
+                        roll,
+                        totalFees: total
+                    });
+                }
+                saveDB(db);
+                modalRoot.innerHTML = '';
+                modalRoot.classList.add('hidden');
+                renderStudents();
+                refreshStats();
+            });
+        }
+
+        // Staff CRUD
+        const staffTableBody = document.querySelector('#staffTable tbody');
+
+        function renderStaff(filter = '') {
+            db = loadDB();
+            const tbody = staffTableBody;
+            tbody.innerHTML = '';
+            const list = db.staff.filter(s => !filter || s.name.toLowerCase().includes(filter.toLowerCase()));
+            list.forEach((s, i) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${i+1}</td><td>${s.name}</td><td>${s.designation||''}</td><td>${s.salary||0}</td>
+      <td>
+        <button class="btn" data-id="${s.id}" data-action="edit">Edit</button>
+        <button class="btn" data-id="${s.id}" data-action="salary">Salary</button>
+        <button class="btn danger" data-id="${s.id}" data-action="delete">Delete</button>
+      </td>`;
+                tbody.appendChild(tr);
+            });
+        }
+        document.getElementById('staffSearchBtn').addEventListener('click', () => renderStaff(document.getElementById('staffSearchName').value));
+        document.getElementById('staffClearBtn').addEventListener('click', () => {
+            document.getElementById('staffSearchName').value = '';
+            renderStaff();
+        });
+        document.getElementById('addStaffBtn').addEventListener('click', () => openStaffModal());
+
+        staffTableBody.addEventListener('click', (e) => {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            const id = btn.dataset.id;
+            const action = btn.dataset.action;
+            db = loadDB();
+            if (action === 'edit') openStaffModal(db.staff.find(x => x.id === id));
+            if (action === 'delete') {
+                if (confirm('Delete staff?')) {
+                    db.staff = db.staff.filter(x => x.id !== id);
+                    saveDB(db);
+                    renderStaff();
+                    refreshStats();
+                }
+            }
+            if (action === 'salary') {
+                openSalaryForStaff(id)
+            } // <-- fix: call salary flow
+        });
+
+        function openStaffModal(staff = null) {
+            modalRoot.innerHTML = '';
+            const m = document.createElement('div');
+            m.className = 'modal-back';
+            m.innerHTML = `<div class="modal">
+    <h3>${staff ? 'Edit Staff' : 'Add Staff'}</h3>
+    <div class="row" style="margin-top:8px">
+      <input id="sf_name" placeholder="Name" />
+      <input id="sf_designation" placeholder="Designation" />
+      <input id="sf_salary" placeholder="Salary" />
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn" id="sf_cancel">Close</button>
+      <button class="btn primary" id="sf_save">Save</button>
+    </div>
+  </div>`;
+            modalRoot.appendChild(m);
+            modalRoot.classList.remove('hidden');
+            if (staff) {
+                document.getElementById('sf_name').value = staff.name;
+                document.getElementById('sf_designation').value = staff.designation || '';
+                document.getElementById('sf_salary').value = staff.salary || ''
+            }
+            m.addEventListener('click', (ev) => {
+                if (ev.target === m || ev.target.id === 'sf_cancel') {
+                    modalRoot.innerHTML = '';
+                    modalRoot.classList.add('hidden')
+                }
+            });
+            document.getElementById('sf_save').addEventListener('click', () => {
+                const name = document.getElementById('sf_name').value.trim();
+                if (!name) {
+                    alert('Name required');
+                    return;
+                }
+                const designation = document.getElementById('sf_designation').value.trim();
+                const salary = parseFloat(document.getElementById('sf_salary').value) || 0;
+                db = loadDB();
+                if (staff) {
+                    staff.name = name;
+                    staff.designation = designation;
+                    staff.salary = salary;
+                    db.staff = db.staff.map(x => x.id === staff.id ? staff : x)
+                } else db.staff.push({
+                    id: uid('stf'),
+                    name,
+                    designation,
+                    salary
+                });
+                saveDB(db);
+                modalRoot.innerHTML = '';
+                modalRoot.classList.add('hidden');
+                renderStaff();
+                refreshStats();
+            });
+        }
+
+        // Marks
+        function populateExamSelect() {
+            db = loadDB();
+            const sel = document.getElementById('marksExamSelect');
+            sel.innerHTML = '<option value="">Select exam</option>';
+            db.exams.forEach(e => {
+                const o = document.createElement('option');
+                o.value = e.id;
+                o.textContent = e.title;
+                sel.appendChild(o);
+            });
+        }
+        document.getElementById('addExamBtn').addEventListener('click', () => {
+            openModal(`<h3>Create Exam</h3>
+    <div style="margin-top:8px"><input id="ex_title" placeholder="Exam title (e.g. Midterm 2025)" style="width:100%;padding:8px"/></div>
+    <div style="margin-top:8px"><input id="ex_subjects" placeholder="Subjects comma separated (Math,Eng,Science)" style="width:100%;padding:8px"/></div>
+    <div style="margin-top:12px;display:flex;justify-content:flex-end;gap:8px"><button class="btn" id="ex_cancel">Close</button><button class="btn primary" id="ex_save">Create</button></div>`);
+            document.getElementById('ex_save').addEventListener('click', () => {
+                const title = document.getElementById('ex_title').value.trim();
+                const subjects = document.getElementById('ex_subjects').value.split(',').map(s => s.trim()).filter(Boolean);
+                if (!title || subjects.length === 0) {
+                    alert('Enter title and subjects');
+                    return;
+                }
+                db = loadDB();
+                db.exams.push({
+                    id: uid('ex'),
+                    title,
+                    subjects
+                });
+                saveDB(db);
+                closeModal();
+                populateExamSelect();
+                toast('Exam created');
+            });
+            document.getElementById('ex_cancel').addEventListener('click', () => closeModal());
+        });
+        document.getElementById('marksLoad').addEventListener('click', () => {
+                    const examId = document.getElementById('marksExamSelect').value;
+                    const cls = document.getElementById('marksClassSelect').value;
+                    const area = document.getElementById('marksFormArea');
+                    area.innerHTML = '';
+                    if (!examId) {
+                        alert('Choose exam');
+                        return;
+                    }
+                    if (!cls) {
+                        alert('Choose class');
+                        return;
+                    }
+                    db = loadDB();
+                    const exam = db.exams.find(e => e.id === examId);
+                    const studs = db.students.filter(s => s.class === cls);
+                    if (studs.length === 0) {
+                        area.innerHTML = '<div class="small muted">No students</div>';
+                        return;
+                    }
+                    const table = document.createElement('table');
+                    table.innerHTML = `<thead><tr><th>#</th><th>Name</th>${exam.subjects.map(sub=>`<th>${sub}</th>`).join('')}<th>Save</th></tr></thead>`;
+  const tbody = document.createElement('tbody');
+  studs.forEach((s,i)=>{
+    const existing = db.marks.find(m=>m.examId===examId && m.studentId===s.id);
+    const row = document.createElement('tr');
+    row.innerHTML = `<td>${i+1}</td><td>${s.name}</td>${exam.subjects.map(sub=>`<td><input data-sub="${sub}" data-stu="${s.id}" value="${existing && existing.subjects[sub] !== undefined ? existing.subjects[sub] : ''}" /></td>`).join('')}<td><button class="btn" data-stu="${s.id}">Save</button></td>`;
+    tbody.appendChild(row);
+  });
+  table.appendChild(tbody);
+  area.appendChild(table);
+  area.querySelectorAll('button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const sid = btn.dataset.stu;
+      const inputs = area.querySelectorAll(`input[data-stu="${sid}"]`);
+      const subjects = {};
+      inputs.forEach(inp=>{ subjects[inp.dataset.sub] = parseFloat(inp.value) || 0 });
+      db = loadDB();
+      const existing = db.marks.find(m=>m.examId===examId && m.studentId===sid);
+      if(existing){ existing.subjects = subjects; existing.date = nowIso(); } else { db.marks.push({id:uid('m'),examId,studentId:sid,class:cls,subjects,date:nowIso()}); }
+      saveDB(db); toast('Saved marks'); refreshStats();
+    });
+  });
+});
+
+// Attendance
+function populateAttClasses(){
+  db = loadDB();
+  const sel = document.getElementById('attClassSelect');
+  const classes = Array.from(new Set(db.students.map(s=>s.class))).sort();
+  sel.innerHTML = '<option value="">--select class--</option>';
+  classes.forEach(c=>{ const o=document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o) });
+}
+document.getElementById('attLoadBtn').addEventListener('click', ()=>{
+  const cls = document.getElementById('attClassSelect').value;
+  const date = document.getElementById('attDate').value || new Date().toISOString().slice(0,10);
+  if(!cls){alert('Select class');return;}
+  db = loadDB();
+  const list = db.students.filter(s=>s.class===cls);
+  const area = document.getElementById('attStudentsArea'); area.innerHTML='';
+  if(list.length===0){ area.innerHTML='<div class="small muted">No students in class.</div>'; return;}
+  const table = document.createElement('table');
+  table.innerHTML = `<thead><tr><th>#</th><th>Name</th><th>Present</th></tr></thead>`;
+  const tbody = document.createElement('tbody');
+  list.forEach((s,i)=>{
+    const existing = db.attendance.find(a=>a.studentId===s.id && a.date===date);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${i+1}</td><td>${s.name}</td><td><input type="checkbox" data-id="${s.id}" data-class="${cls}" ${existing && existing.present ? 'checked' : ''}></td>`;
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody); area.appendChild(table);
+  area.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener('change', ()=>{
+      const id = cb.dataset.id; const present = cb.checked; const cls = cb.dataset.class;
+      db = loadDB();
+      db.attendance = db.attendance.filter(a=>!(a.studentId===id && a.date===date));
+      db.attendance.push({id:uid('att'),studentId:id,class:cls,date:date,present:present});
+      saveDB(db); refreshStats();
+    });
+  });
+});
+document.getElementById('attSearchStudentBtn').addEventListener('click', ()=>{
+  const name = prompt('Enter student full name to search:');
+  const cls = document.getElementById('attClassSelect').value;
+  if(!name){return;}
+  db = loadDB();
+  const found = db.students.find(s=>s.name.toLowerCase()===name.toLowerCase() && (!cls || s.class===cls));
+  if(!found) return alert('No student found');
+  const recs = db.attendance.filter(a=>a.studentId===found.id).sort((a,b)=>b.date.localeCompare(a.date));
+  const lines = recs.map(r=>`${r.date} - ${r.present ? 'Present' : 'Absent'}`).join('\n');
+  alert(`Attendance for ${found.name}:\n${lines || 'No records'}`);
+});
+
+// Fees
+function populateFeesClasses(){
+  db = loadDB();
+  const sel = document.getElementById('feesClassSelect');
+  const classes = Array.from(new Set(db.students.map(s=>s.class))).sort();
+  sel.innerHTML = '<option value="">--All classes--</option>';
+  classes.forEach(c=>{ const o = document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o) });
+}
+document.getElementById('feesSearchBtn').addEventListener('click', ()=>{
+  const cls = document.getElementById('feesClassSelect').value;
+  const name = document.getElementById('feesSearchName').value.trim();
+  db = loadDB();
+  const found = db.students.find(s=> (!cls || s.class===cls) && (!name || s.name.toLowerCase().includes(name.toLowerCase())));
+  const area = document.getElementById('feesStudentArea'); area.innerHTML='';
+  if(!found){ area.innerHTML='<div class="small muted">No student found.</div>'; return;}
+  const payments = db.feesPayments.filter(p=>p.studentId===found.id);
+  const paid = payments.reduce((a,b)=>a+b.amount,0);
+  const remaining = (found.totalFees||0) - paid;
+  area.innerHTML = `<div><strong>${found.name}</strong> (Class ${found.class})</div>
+    <div class="small">Total fees: <strong>${found.totalFees||0}</strong> | Paid: <strong>${paid}</strong> | Remaining: <strong>${remaining}</strong></div>
+    <div style="margin-top:8px" class="row">
+      <input id="feeAmount" placeholder="Amount to pay" />
+      <select id="feeMethod"><option>Cash</option><option>Card</option><option>Online</option></select>
+      <button class="btn primary" id="doPayBtn">Pay</button>
+      <button class="btn" id="viewPaymentsBtn">History</button>
+    </div>`;
+  document.getElementById('doPayBtn').addEventListener('click', ()=>{
+    const amt = parseFloat(document.getElementById('feeAmount').value) || 0; const method=document.getElementById('feeMethod').value;
+    if(amt<=0){alert('Enter amount');return;}
+    const rno = 'R'+Math.floor(Math.random()*899999+100000);
+    db = loadDB();
+    db.feesPayments.push({id:uid('fp'),studentId:found.id,amount:amt,date:nowIso(),method,receiptNo:rno});
+    saveDB(db); toast('Payment recorded'); document.getElementById('feeAmount').value=''; renderFeesHistory(found.id); refreshStats();
+  });
+  document.getElementById('viewPaymentsBtn').addEventListener('click', ()=>renderFeesHistory(found.id));
+});
+function renderFeesHistory(studentId){
+  db = loadDB();
+  const area = document.getElementById('feesHistoryArea'); area.innerHTML='';
+  const payments = db.feesPayments.filter(p=>p.studentId===studentId).sort((a,b)=>b.date.localeCompare(a.date));
+  if(payments.length===0){ area.innerHTML='<div class="small muted">No payments</div>'; return;}
+  const tbl = document.createElement('table'); tbl.innerHTML = `<thead><tr><th>#</th><th>Amount</th><th>Method</th><th>Date</th><th>Receipt</th></tr></thead>`;
+  const tbody = document.createElement('tbody');
+  payments.forEach((p,i)=>{ const tr=document.createElement('tr'); tr.innerHTML = `<td>${i+1}</td><td>${p.amount}</td><td>${p.method}</td><td>${new Date(p.date).toLocaleString()}</td><td><button class="btn" data-id="${p.id}" data-act="receipt">Receipt</button></td>`; tbody.appendChild(tr)});
+  tbl.appendChild(tbody); area.appendChild(tbl);
+  area.querySelectorAll('button[data-act=receipt]').forEach(b=>b.addEventListener('click', ()=>{
+    const pid=b.dataset.id; const rec = db.feesPayments.find(x=>x.id===pid);
+    const stu = db.students.find(s=>s.id===rec.studentId);
+    const school = (db.meta && db.meta.school) || {name:'',address:'',contact:''};
+    openReceiptModal('Fee Receipt', `
+      <div class="receipt">
+        <div style="display:flex;justify-content:space-between">
+          <div><strong>${school.name || ''}</strong><br/><small>${school.address || ''}</small></div>
+          <div><strong>Receipt ${rec.receiptNo}</strong><br/><small>${new Date(rec.date).toLocaleString()}</small></div>
+        </div>
+        <hr/>
+        <div><strong>Student:</strong> ${stu.name} (Class ${stu.class})</div>
+        <div>Amount Paid: <strong>${rec.amount}</strong></div>
+        <div>Method: ${rec.method}</div>
+        <div style="margin-top:10px">In words: ${numberToWords(rec.amount)}</div>
+        <div style="margin-top:18px;display:flex;justify-content:space-between">
+          <div>_____________________<br/>Principal</div>
+          <div>_____________________<br/>Cashier</div>
+        </div>
+        <div style="margin-top:8px" class="small muted">Contact: ${school.contact || ''}</div>
+      </div>
+    `);
+  }));
+}
+
+// number to words (simple)
+function numberToWords(num){
+  if(!num) return 'zero';
+  const n = Math.round(num);
+  const words = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
+  const tens = ['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+  if(n<20) return words[n];
+  if(n<100) return tens[Math.floor(n/10)] + (n%10?'-'+words[n%10]:'');
+  if(n<1000) return words[Math.floor(n/100)] + ' hundred' + (n%100? ' and ' + numberToWords(n%100):'');
+  return n.toString();
+}
+
+// Salary
+document.getElementById('salarySearchBtn').addEventListener('click', ()=>renderSalaryArea(document.getElementById('salarySearchName').value));
+function renderSalaryArea(filterName=''){
+  db = loadDB();
+  const area = document.getElementById('salaryArea'); area.innerHTML='';
+  const list = db.staff.filter(s=>!filterName || s.name.toLowerCase().includes(filterName.toLowerCase()));
+  if(list.length===0){ area.innerHTML='<div class="small muted">No staff</div>'; return;}
+  const tbl = document.createElement('table'); tbl.innerHTML = `<thead><tr><th>#</th><th>Name</th><th>Designation</th><th>Salary</th><th>Actions</th></tr></thead>`; const tbody=document.createElement('tbody');
+  list.forEach((s,i)=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${i+1}</td><td>${s.name}</td><td>${s.designation||''}</td><td>${s.salary||0}</td><td><button class="btn" data-id="${s.id}" data-act="add">Add Salary</button><button class="btn" data-id="${s.id}" data-act="view">View</button></td>`; tbody.appendChild(tr) });
+  tbl.appendChild(tbody); area.appendChild(tbl);
+  area.querySelectorAll('button[data-act=add]').forEach(b=>b.addEventListener('click', ()=>openSalaryModal(b.dataset.id)));
+  area.querySelectorAll('button[data-act=view]').forEach(b=>b.addEventListener('click', ()=>viewSalaryPayments(b.dataset.id)));
+}
+
+// Fix: function to open salary from staff table
+function openSalaryForStaff(staffId){
+  openSalaryModal(staffId);
+}
+
+function openSalaryModal(staffId){
+  db = loadDB();
+  const staff = db.staff.find(s=>s.id===staffId);
+  modalRoot.innerHTML=''; const m=document.createElement('div'); m.className='modal-back';
+  m.innerHTML = `<div class="modal"><h3>Salary Payment for ${staff.name}</h3>
+    <div class="row" style="margin-top:8px"><input id="sal_month" placeholder="Month (e.g. 2025-07)" /><input id="sal_amount" placeholder="Amount" /></div>
+    <div style="margin-top:8px"><input id="sal_note" placeholder="Note (optional)" /></div>
+    <div style="margin-top:12px;display:flex;justify-content:flex-end;gap:8px"><button class="btn" id="sal_cancel">Close</button><button class="btn primary" id="sal_save">Save</button></div></div>`;
+  modalRoot.appendChild(m); modalRoot.classList.remove('hidden');
+  m.addEventListener('click',(ev)=>{ if(ev.target===m || ev.target.id==='sal_cancel'){ modalRoot.innerHTML=''; modalRoot.classList.add('hidden') }});
+  document.getElementById('sal_save').addEventListener('click', ()=>{
+    const month=document.getElementById('sal_month').value.trim(); const amount=parseFloat(document.getElementById('sal_amount').value) || 0; const note=document.getElementById('sal_note').value;
+    if(!month || amount<=0){alert('Month and amount required'); return;}
+    db = loadDB(); db.salaryPayments.push({id:uid('sp'),staffId,month,amount,note,disbursed:false,date:nowIso()}); saveDB(db); modalRoot.innerHTML=''; modalRoot.classList.add('hidden'); renderSalaryArea(); refreshStats(); toast('Salary recorded');
+  });
+}
+
+function viewSalaryPayments(staffId){
+  db = loadDB();
+  const staff = db.staff.find(s=>s.id===staffId);
+  modalRoot.innerHTML=''; const m=document.createElement('div'); m.className='modal-back';
+  const recs = db.salaryPayments.filter(p=>p.staffId===staffId).sort((a,b)=>b.date.localeCompare(a.date));
+  let inner = `<div class="modal"><h3>Salary - ${staff.name}</h3>`;
+  if(recs.length===0) inner += '<div class="small muted">No records</div>';
+  else {
+    inner += `<table style="margin-top:8px"><thead><tr><th>Month</th><th>Amount</th><th>Note</th><th>Disbursed</th><th>Action</th></tr></thead><tbody>`;
+    recs.forEach(r=> inner += `<tr><td>${r.month}</td><td>${r.amount}</td><td>${r.note||''}</td><td>${r.disbursed? 'Yes':'No'}</td>
+      <td><button class="btn" data-id="${r.id}" data-act="dis">Toggle Disbursed</button> <button class="btn" data-id="${r.id}" data-act="rec">Receipt</button></td></tr>`);
+    inner += '</tbody></table>';
+  }
+  inner += `<div style="margin-top:12px;display:flex;justify-content:flex-end"><button class="btn" id="sal_close">Close</button></div></div>`;
+  m.innerHTML = inner; modalRoot.appendChild(m); modalRoot.classList.remove('hidden');
+  m.addEventListener('click',(ev)=>{ if(ev.target===m || ev.target.id==='sal_close'){ modalRoot.innerHTML=''; modalRoot.classList.add('hidden') }});
+  m.querySelectorAll('button[data-act=dis]').forEach(b=>b.addEventListener('click', ()=>{
+    const id=b.dataset.id; db = loadDB(); const rec=db.salaryPayments.find(x=>x.id===id); rec.disbursed=!rec.disbursed; saveDB(db); viewSalaryPayments(staffId); refreshStats();
+  }));
+  m.querySelectorAll('button[data-act=rec]').forEach(b=>b.addEventListener('click', ()=>{
+    const id=b.dataset.id; db = loadDB(); const rec = db.salaryPayments.find(x=>x.id===id);
+    const school = (db.meta && db.meta.school) || {name:'',address:'',contact:''};
+    openReceiptModal('Salary Receipt', `<div class="receipt"><div style="display:flex;justify-content:space-between"><div><strong>${school.name||''}</strong><br/><small>${school.address||''}</small></div><div><strong>Salary Slip</strong><br/><small>${new Date(rec.date).toLocaleString()}</small></div></div><hr/><div><strong>${staff.name}</strong></div><div>Month: ${rec.month}</div><div>Amount: ${rec.amount}</div><div>Note: ${rec.note||''}</div><div style="margin-top:12px">In words: ${numberToWords(rec.amount)}</div><div style="margin-top:18px;display:flex;justify-content:space-between"><div>__________________<br/>Manager</div><div>__________________<br/>Account</div></div><div style="margin-top:8px" class="small muted">Contact: ${school.contact||''}</div></div>`);
+  }));
+}
+
+// Documents
+function populateDocClasses(){ populateClassFilters(); }
+document.getElementById('docSearchBtn').addEventListener('click', ()=>{
+  const cls = document.getElementById('docClassSelect').value; const name=document.getElementById('docStudentName').value.trim();
+  db = loadDB();
+  const found = db.students.find(s=> (!cls || s.class===cls) && (!name || s.name.toLowerCase().includes(name.toLowerCase())));
+  if(!found) return document.getElementById('docArea').innerHTML='<div class="small muted">No student</div>';
+  openDocumentsModalForStudent(found);
+});
+
+function openDocumentsModalForStudent(student){
+  db = loadDB();
+  modalRoot.innerHTML=''; const m=document.createElement('div'); m.className='modal-back';
+  const docs = db.documents.filter(d=>d.studentId===student.id).sort((a,b)=>b.date.localeCompare(a.date));
+  let inner = `<div class="modal"><h3>Documents - ${student.name}</h3>
+    <div class="small">Add new document record</div>
+    <div class="row" style="margin-top:8px"><input id="doc_type" placeholder="Type (Marksheet, TC)" /><input id="doc_path" placeholder="Path / reference" /></div>
+    <div style="margin-top:8px"><input id="doc_notes" placeholder="Notes"/></div>
+    <div style="margin-top:8px;display:flex;justify-content:flex-end;gap:8px"><button class="btn" id="doc_close">Close</button><button class="btn primary" id="doc_save">Save</button></div>
+    <hr/>`;
+  if(docs.length===0) inner += '<div class="small muted">No documents</div>';
+  else {
+    inner += `<table style="margin-top:8px"><thead><tr><th>#</th><th>Type</th><th>Path</th><th>Date</th><th>Handover</th></tr></thead><tbody>`;
+    docs.forEach((d,i)=>inner += `<tr><td>${i+1}</td><td>${d.type}</td><td>${d.path||''}</td><td>${new Date(d.date).toLocaleString()}</td><td>${d.handedOver? 'Yes':'<button class="btn" data-id="${d.id}" data-act="hando">Handover</button>'}</td></tr>`);
+    inner += '</tbody></table>';
+  }
+  inner += '</div>';
+  m.innerHTML = inner; modalRoot.appendChild(m); modalRoot.classList.remove('hidden');
+  m.addEventListener('click',(ev)=>{ if(ev.target===m || ev.target.id==='doc_close'){ modalRoot.innerHTML=''; modalRoot.classList.add('hidden') }});
+  document.getElementById('doc_save').addEventListener('click', ()=>{
+    const tp=document.getElementById('doc_type').value.trim(); const path=document.getElementById('doc_path').value.trim(); const notes=document.getElementById('doc_notes').value.trim();
+    if(!tp){alert('Type required');return;}
+    db = loadDB();
+    db.documents.push({id:uid('doc'),studentId:student.id,type:tp,path,notes,handedOver:false,date:nowIso()}); saveDB(db); openDocumentsModalForStudent(student); refreshStats();
+  });
+  // Handover handlers - attach after render
+  m.querySelectorAll('button[data-act=hando]').forEach(b=>b.addEventListener('click', ()=>{
+    const id=b.dataset.id; db = loadDB(); const rec = db.documents.find(x=>x.id===id); if(rec){ rec.handedOver = true; rec.handoverDate = nowIso(); saveDB(db); openDocumentsModalForStudent(student); refreshStats(); }
+  }));
+}
+
+// Leaves
+document.getElementById('addLeaveBtn').addEventListener('click', ()=>openLeaveModal());
+function openLeaveModal(){
+  modalRoot.innerHTML=''; const m=document.createElement('div'); m.className='modal-back';
+  m.innerHTML = `<div class="modal"><h3>Add Leave Request</h3>
+    <div class="row" style="margin-top:8px"><select id="leaveType"><option value="student">Student</option><option value="staff">Staff</option></select><input id="leavePerson" placeholder="Name or ID"/></div>
+    <div style="margin-top:8px" class="row"><input id="leaveFrom" type="date" /><input id="leaveTo" type="date" /></div>
+    <div style="margin-top:8px;"><input id="leaveReason" placeholder="Reason"/></div>
+    <div style="margin-top:12px;display:flex;justify-content:flex-end;gap:8px"><button class="btn" id="leave_cancel">Close</button><button class="btn primary" id="leave_save">Save</button></div></div>`;
+  modalRoot.appendChild(m); modalRoot.classList.remove('hidden');
+  m.addEventListener('click',(ev)=>{ if(ev.target===m || ev.target.id==='leave_cancel'){ modalRoot.innerHTML=''; modalRoot.classList.add('hidden') }});
+  document.getElementById('leave_save').addEventListener('click', ()=>{
+    const type=document.getElementById('leaveType').value; const person=document.getElementById('leavePerson').value.trim();
+    const from=document.getElementById('leaveFrom').value; const to=document.getElementById('leaveTo').value; const reason=document.getElementById('leaveReason').value;
+    if(!person || !from || !to){alert('Fill all fields'); return;}
+    db = loadDB();
+    let pid = null;
+    if(type==='student'){ const s=db.students.find(x=>x.name.toLowerCase()===person.toLowerCase()); if(s) pid=s.id; }
+    else { const st=db.staff.find(x=>x.name.toLowerCase()===person.toLowerCase()); if(st) pid=st.id; }
+    db.leaves.push({id:uid('lv'),type,personId:pid,name:person,from,to,reason,status:'Pending',date:nowIso()}); saveDB(db); modalRoot.innerHTML=''; modalRoot.classList.add('hidden'); renderLeaves(); refreshStats();
+  });
+}
+function renderLeaves(){
+  db = loadDB();
+  const area=document.getElementById('leavesArea'); area.innerHTML='';
+  if(db.leaves.length===0) return area.innerHTML='<div class="small muted">No leaves</div>';
+  const tbl=document.createElement('table'); tbl.innerHTML=`<thead><tr><th>#</th><th>Type</th><th>Name</th><th>From</th><th>To</th><th>Reason</th><th>Status</th></tr></thead>`;
+  const tbody=document.createElement('tbody');
+  db.leaves.forEach((l,i)=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${i+1}</td><td>${l.type}</td><td>${l.name}</td><td>${l.from}</td><td>${l.to}</td><td>${l.reason}</td><td>${l.status}</td>`; tbody.appendChild(tr) });
+  tbl.appendChild(tbody); area.appendChild(tbl);
+}
+
+// Receipt modal
+function openReceiptModal(title, innerHtml){
+  modalRoot.innerHTML=''; const m=document.createElement('div'); m.className='modal-back';
+  m.innerHTML = `<div class="modal"><h3>${title}</h3><div>${innerHtml}</div><div style="margin-top:12px;display:flex;justify-content:flex-end;gap:8px"><button class="btn" id="rec_close">Close</button><button class="btn primary" id="rec_print">Print</button></div></div>`;
+  modalRoot.appendChild(m); modalRoot.classList.remove('hidden');
+  m.addEventListener('click',(ev)=>{ if(ev.target===m || ev.target.id==='rec_close'){ modalRoot.innerHTML=''; modalRoot.classList.add('hidden') }});
+  document.getElementById('rec_print').addEventListener('click', ()=>{ const w = window.open('','_blank'); w.document.write('<html><head><title>Receipt</title></head><body>'+innerHtml+'</body></html>'); w.print(); w.close(); });
+}
+
+// Generic modal open/close
+function openModal(innerHtml, closable=true){
+  modalRoot.innerHTML=''; const m=document.createElement('div'); m.className='modal-back';
+  m.innerHTML = `<div class="modal">${innerHtml}</div>`;
+  modalRoot.appendChild(m); modalRoot.classList.remove('hidden');
+  if(closable) m.addEventListener('click',(ev)=>{ if(ev.target===m){ modalRoot.innerHTML=''; modalRoot.classList.add('hidden') }});
+}
+function closeModal(){ modalRoot.innerHTML=''; modalRoot.classList.add('hidden'); }
+
+// Documents handover fixed by ensuring handler updates db and refreshes UI (see openDocumentsModalForStudent)
+
+// helper to render various tables initially
+function renderAllTables(){ renderStudents(); renderStaff(); refreshStats(); populateClassFilters(); populateExamSelect(); }
+
+// initial view control
+function showLogin(){ loginPanel.style.display='block'; mainApp.classList.add('hidden'); }
+function showApp(){ loginPanel.style.display='none'; mainApp.classList.remove('hidden'); ensureSchoolInfo(); renderAllTables(); refreshStats(); }
+
+// Initial load
+renderAllTables();
+ensureSchoolInfo();
+showLogin();
+    </script>
+</body>
+
+</html>
